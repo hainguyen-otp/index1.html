@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f5f2">
+<title>Creator Hub — Link & ảnh</title>
+<style>
+:root{
+  --bg:#f7f5f2;--panel:#fff;--ink:#24231f;--muted:#77756f;--line:#e9e5df;
+  --purple:#6d4aff;--purple-dark:#5538dc;--soft:#f0ebff;--orange:#f16b45;
+  --green:#18794e;--shadow:0 8px 30px rgba(35,30,20,.06)
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.app{max-width:1120px;margin:0 auto;min-height:100vh}
+.topbar{height:68px;padding:0 18px;display:flex;align-items:center;justify-content:space-between;background:rgba(247,245,242,.94);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:-.5px}
+.logo{width:34px;height:34px;border-radius:11px;background:var(--purple);color:white;display:grid;place-items:center;font-weight:900;font-size:18px}
+.top-actions{display:flex;gap:8px}
+.btn{border:0;border-radius:11px;padding:11px 15px;font-weight:750}
+.btn-primary{background:var(--purple);color:white}
+.btn-primary:hover{background:var(--purple-dark)}
+.btn-light{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.btn-small{padding:8px 10px;font-size:12px;border-radius:9px}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:22px;padding:24px 18px 40px}
+.heading{margin:3px 0 6px;font-size:28px;letter-spacing:-1px}
+.subheading{margin:0 0 22px;color:var(--muted);font-size:14px;line-height:1.5}
+.tabs{display:flex;gap:7px;margin-bottom:18px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;font-size:13px;font-weight:750;color:var(--muted)}
+.tab.active{background:var(--soft);border-color:#d9ceff;color:var(--purple)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:18px;margin-bottom:16px}
+.panel-title{font-size:16px;font-weight:850;margin:0 0 5px}
+.panel-help{font-size:12px;color:var(--muted);line-height:1.5;margin:0 0 16px}
+.field{display:block;margin:0 0 13px}
+.field span{display:block;font-size:12px;font-weight:750;margin-bottom:7px}
+.field input,.field textarea{width:100%;border:1px solid #dedbd5;border-radius:10px;padding:12px;background:#fff;outline:none;color:var(--ink);font-size:14px}
+.field input:focus,.field textarea:focus{border-color:var(--purple);box-shadow:0 0 0 3px #6d4aff19}
+.field textarea{resize:vertical;min-height:74px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.upload-row{display:flex;gap:12px;align-items:center;margin-bottom:14px}
+.upload-preview{width:76px;height:76px;flex:none;border-radius:12px;background:#f0eee9;border:1px dashed #c9c4ba;display:grid;place-items:center;overflow:hidden;color:#888;font-size:11px;text-align:center}
+.upload-preview img{width:100%;height:100%;object-fit:cover}
+.upload-tools{display:flex;flex-direction:column;gap:7px;align-items:flex-start}
+.upload-tools small{font-size:11px;color:var(--muted);line-height:1.4}
+.file-input{display:none}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.notice{padding:12px 13px;background:#fff8e8;border:1px solid #f4e5bd;border-radius:12px;font-size:12px;line-height:1.5;color:#72571d}
+.list-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.count{color:var(--muted);font-size:12px}
+.items{display:flex;flex-direction:column;gap:10px}
+.item-row{display:flex;align-items:center;gap:11px;padding:10px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.thumb{width:54px;height:62px;flex:none;border-radius:9px;background:#f0eee9;overflow:hidden;display:grid;place-items:center;color:#8a877f;font-size:10px;text-align:center}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.item-info{min-width:0;flex:1}
+.item-info strong{font-size:13px;display:block;overflow-wrap:anywhere}
+.item-info small{display:block;color:var(--muted);font-size:11px;margin-top:4px}
+.row-actions{display:flex;gap:5px}
+.icon-btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 8px;font-size:12px}
+.preview-wrap{position:sticky;top:88px;align-self:start}
+.preview-label{display:flex;justify-content:space-between;align-items:center;margin:2px 0 12px;font-size:13px;font-weight:800}
+.live{font-size:10px;letter-spacing:.6px;color:var(--green);background:#e7f6ed;padding:5px 8px;border-radius:99px}
+.phone{max-width:330px;margin:0 auto;border:7px solid #24231f;border-radius:32px;background:#fff;overflow:hidden;box-shadow:0 20px 50px #25201820;min-height:590px}
+.phone-top{height:25px;background:#fff;display:flex;justify-content:center;align-items:center}
+.speaker{height:4px;width:55px;border-radius:8px;background:#d8d5cf}
+.profile{text-align:center;padding:12px 18px 18px}
+.avatar{width:62px;height:62px;margin:0 auto 10px;border-radius:22px;background:linear-gradient(135deg,#c7b9ff,#f4d7c9);display:grid;place-items:center;font-size:26px}
+.profile h2{font-size:18px;margin:0 0 5px}
+.profile p{font-size:11px;color:var(--muted);margin:0}
+.preview-cards{padding:0 14px 18px;display:flex;flex-direction:column;gap:12px}
+.preview-card{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.preview-image-link{display:block;text-decoration:none;color:inherit}
+.preview-image{width:100%;aspect-ratio:4/3;object-fit:cover;display:block;background:#f0eee9}
+.preview-placeholder{width:100%;aspect-ratio:4/3;display:grid;place-items:center;background:linear-gradient(135deg,#f2f0eb,#e7e2f7);color:#85817b;font-size:12px;text-align:center;padding:15px}
+.preview-card-body{padding:10px}
+.preview-card-body strong{display:block;font-size:12px;margin-bottom:5px}
+.preview-card-body p{font-size:10px;color:var(--muted);margin:0 0 9px;line-height:1.4}
+.preview-dest{display:none;width:100%;padding:9px 10px;border:0;border-radius:8px;background:var(--purple);color:white;font-size:11px;font-weight:800;text-decoration:none;text-align:center}
+.preview-dest.show{display:block}
+.preview-foot{text-align:center;padding:0 14px 18px;color:#8b8882;font-size:9px}
+.empty{text-align:center;padding:22px 12px;color:var(--muted);font-size:12px;border:1px dashed var(--line);border-radius:12px}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);padding:11px 15px;background:#24231f;color:white;border-radius:12px;font-size:13px;display:none;z-index:10;max-width:90%;text-align:center}
+.toast.show{display:block}
+.mobile-preview-button{display:none}
+@media(max-width:800px){
+ .layout{grid-template-columns:1fr;padding:18px 12px 30px;gap:12px}
+ .heading{font-size:25px}
+ .preview-wrap{position:static}
+ .phone{max-width:360px}
+ .topbar{padding:0 12px}
+ .top-actions .btn{padding:9px 10px;font-size:12px}
+}
+@media(min-width:801px){.left-col{min-width:0}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand"><div class="logo">✦</div><span>Creator Hub</span></div>
+    <div class="top-actions">
+      <button class="btn btn-light" id="exportBtn">Xuất dữ liệu</button>
+      <button class="btn btn-primary" id="previewBtn">Xem trang</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <section class="left-col">
+      <h1 class="heading">Trang của bạn</h1>
+      <p class="subheading">Tạo một trang giới thiệu sản phẩm bằng ảnh và các đường link của riêng bạn.</p>
+      <div class="tabs">
+        <button class="tab active" data-tab="editor">✎ Chỉnh sửa</button>
+        <button class="tab" data-tab="items">▦ Danh sách ảnh</button>
+      </div>
+
+      <div id="editorView">
+        <section class="panel">
+          <h2 class="panel-title">Thông tin trang</h2>
+          <p class="panel-help">Đây là phần giới thiệu sẽ hiển thị phía trên các ảnh.</p>
+          <label class="field"><span>Tên trang</span><input id="pageTitle" value="Góc khám phá của tôi" maxlength="60"></label>
+          <label class="field"><span>Mô tả ngắn</span><input id="pageDescription" value="Những sản phẩm mình tìm thấy và muốn chia sẻ." maxlength="120"></label>
+        </section>
+
+        <section class="panel" id="formPanel">
+          <h2 class="panel-title" id="formTitle">Thêm ảnh mới</h2>
+          <p class="panel-help">Mỗi ảnh có một link Shopee Affiliate và một link đích riêng.</p>
+          <div class="upload-row">
+            <div class="upload-preview" id="uploadPreview">Ảnh xem trước</div>
+            <div class="upload-tools">
+              <label class="btn btn-light btn-small" for="imageFile">Chọn ảnh từ máy</label>
+              <input class="file-input" id="imageFile" type="file" accept="image/*">
+              <small>Hoặc dán đường dẫn ảnh vào ô bên dưới. Ảnh được chọn sẽ lưu trong trình duyệt này.</small>
+            </div>
+          </div>
+          <label class="field"><span>Đường dẫn ảnh (URL)</span><input id="imageUrl" type="url" placeholder="https://.../anh-san-pham.jpg"></label>
+          <label class="field"><span>Tên ảnh / sản phẩm</span><input id="itemTitle" placeholder="Ví dụ: Đèn bàn mini" maxlength="80"></label>
+          <label class="field"><span>Mô tả (không bắt buộc)</span><textarea id="itemDescription" placeholder="Viết mô tả ngắn..."></textarea></label>
+          <label class="field"><span>Link Affiliate Shopee</span><input id="affiliateUrl" type="url" placeholder="Dán link affiliate Shopee của bạn"></label>
+          <label class="field"><span>Link đích khi người xem quay lại</span><input id="destinationUrl" type="url" placeholder="https://..."></label>
+          <div class="actions">
+            <button class="btn btn-primary" id="saveItem">＋ Thêm vào trang</button>
+            <button class="btn btn-light" id="cancelEdit" style="display:none">Hủy sửa</button>
+            <button class="btn btn-light" id="clearForm">Xóa nội dung</button>
+          </div>
+        </section>
+
+        <div class="notice"><strong>Lưu ý:</strong> Khi người xem quay lại từ Shopee, website sẽ hiện nút “Tiếp tục đến trang đích”. Trình duyệt có thể mở Shopee ở tab mới; nếu vậy người xem chỉ cần chuyển lại tab website. Trang không tự chiếm nút quay lại.</div>
+      </div>
+
+      <div id="itemsView" style="display:none">
+        <section class="panel">
+          <div class="list-head"><h2 class="panel-title">Ảnh trên trang</h2><span class="count" id="itemCount">0 mục</span></div>
+          <div class="items" id="itemsList"></div>
+        </section>
+      </div>
+    </section>
+
+    <aside class="preview-wrap">
+      <div class="preview-label"><span>Xem trước trang công khai</span><span class="live">BẢN XEM TRƯỚC</span></div>
+      <div class="phone">
+        <div class="phone-top"><div class="speaker"></div></div>
+        <div class="profile">
+          <div class="avatar">✦</div>
+          <h2 id="previewTitle">Góc khám phá của tôi</h2>
+          <p id="previewDescription">Những sản phẩm mình tìm thấy và muốn chia sẻ.</p>
+        </div>
+        <div class="preview-cards" id="previewCards"></div>
+        <div class="preview-foot">Một số liên kết có thể là link tiếp thị liên kết.</div>
+      </div>
+    </aside>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const STORAGE_KEY = "creatorHubShopeeItems_v1";
+let items = [];
+let editingId = null;
+let chosenImageData = "";
+
+const $ = id => document.getElementById(id);
+const escapeText = value => String(value ?? "");
+function showToast(message) {
+  const t = $("toast");
+  t.textContent = message;
+  t.classList.add("show");
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => t.classList.remove("show"), 2800);
+}
+function safeUrl(value) {
+  try {
+    const u = new URL(value);
+    return (u.protocol === "https:" || u.protocol === "http:") ? u.href : "";
+  } catch { return ""; }
+}
+function loadItems() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+    if (Array.isArray(saved)) items = saved;
+  } catch { items = []; }
+}
+function persist() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+  } catch {
+    showToast("Không đủ dung lượng lưu trong trình duyệt. Hãy dùng ảnh URL hoặc xuất dữ liệu.");
+  }
+}
+function getImage(item) { return item.imageData || item.imageUrl || ""; }
+function setPreviewUpload(src) {
+  const box = $("uploadPreview");
+  box.innerHTML = "";
+  if (src) {
+    const img = document.createElement("img");
+    img.src = src; img.alt = "Ảnh đang chọn";
+    box.appendChild(img);
+  } else box.textContent = "Ảnh xem trước";
+}
+function renderPreview() {
+  $("previewTitle").textContent = $("pageTitle").value.trim() || "Trang của tôi";
+  $("previewDescription").textContent = $("pageDescription").value.trim();
+  const holder = $("previewCards");
+  holder.innerHTML = "";
+  if (!items.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "Ảnh của bạn sẽ xuất hiện tại đây sau khi thêm.";
+    holder.appendChild(empty);
+    return;
+  }
+  items.forEach(item => {
+    const card = document.createElement("article");
+    card.className = "preview-card";
+    const a = document.createElement("a");
+    a.className = "preview-image-link";
+    a.href = safeUrl(item.affiliateUrl) || "#";
+    a.target = "_blank";
+    a.rel = "sponsored noopener noreferrer";
+    a.addEventListener("click", e => {
+      if (!safeUrl(item.affiliateUrl)) {
+        e.preventDefault(); showToast("Thêm link Affiliate Shopee hợp lệ trước nhé.");
+        return;
+      }
+      // Keep a clear destination action available when the visitor returns.
+      sessionStorage.setItem("creatorHubReturnItem", String(item.id));
+    });
+    const src = getImage(item);
+    if (src) {
+      const img = document.createElement("img");
+      img.className = "preview-image";
+      img.src = src;
+      img.alt = item.title || "Ảnh sản phẩm";
+      img.loading = "lazy";
+      img.onerror = () => {
+        const p = document.createElement("div");
+        p.className = "preview-placeholder"; p.textContent = "Không tải được ảnh";
+        img.replaceWith(p);
+      };
+      a.appendChild(img);
+    } else {
+      const p = document.createElement("div");
+      p.className = "preview-placeholder"; p.textContent = "Thêm ảnh trong phần Chỉnh sửa";
+      a.appendChild(p);
+    }
+    const body = document.createElement("div");
+    body.className = "preview-card-body";
+    const title = document.createElement("strong"); title.textContent = item.title || "Sản phẩm";
+    const desc = document.createElement("p"); desc.textContent = item.description || "Nhấn vào ảnh để mở liên kết sản phẩm.";
+    const dest = document.createElement("a");
+    dest.className = "preview-dest";
+    dest.textContent = "Tiếp tục đến trang đích";
+    dest.href = safeUrl(item.destinationUrl) || "#";
+    dest.target = "_blank"; dest.rel = "noopener noreferrer";
+    dest.addEventListener("click", e => {
+      if (!safeUrl(item.destinationUrl)) {
+        e.preventDefault(); showToast("Hãy thêm link đích hợp lệ cho ảnh này.");
+      }
+    });
+    body.append(title, desc, dest);
+    card.append(a, body);
+    holder.appendChild(card);
+  });
+}
+function renderList() {
+  const holder = $("itemsList");
+  holder.innerHTML = "";
+  $("itemCount").textContent = items.length + (items.length === 1 ? " mục" : " mục");
+  if (!items.length) {
+    const empty = document.createElement("div");
+    empty.className = "empty"; empty.textContent = "Chưa có ảnh nào. Hãy thêm ảnh ở tab Chỉnh sửa.";
+    holder.appendChild(empty); return;
+  }
+  items.forEach(item => {
+    const row = document.createElement("div"); row.className = "item-row";
+    const thumb = document.createElement("div"); thumb.className = "thumb";
+    const src = getImage(item);
+    if (src) {
+      const img = document.createElement("img"); img.src = src; img.alt = "";
+      img.onerror = () => { thumb.textContent = "Không tải ảnh"; };
+      thumb.appendChild(img);
+    } else thumb.textContent = "Chưa có ảnh";
+    const info = document.createElement("div"); info.className = "item-info";
+    const title = document.createElement("strong"); title.textContent = item.title || "Chưa đặt tên";
+    const small = document.createElement("small"); small.textContent = "Affiliate: " + (safeUrl(item.affiliateUrl) ? "đã thêm" : "chưa thêm") + " · Link đích: " + (safeUrl(item.destinationUrl) ? "đã thêm" : "chưa thêm");
+    info.append(title, small);
+    const actions = document.createElement("div"); actions.className = "row-actions";
+    const edit = document.createElement("button"); edit.className = "icon-btn"; edit.textContent = "Sửa";
+    edit.addEventListener("click", () => editItem(item.id));
+    const del = document.createElement("button"); del.className = "icon-btn"; del.textContent = "Xóa";
+    del.addEventListener("click", () => {
+      if (confirm("Xóa mục này khỏi trang?")) {
+        items = items.filter(x => x.id !== item.id); persist(); renderAll(); showToast("Đã xóa mục.");
+      }
+    });
+    actions.append(edit, del);
+    row.append(thumb, info, actions); holder.appendChild(row);
+  });
+}
+function renderAll() { renderPreview(); renderList(); }
+function clearForm() {
+  editingId = null; chosenImageData = "";
+  ["imageUrl","itemTitle","itemDescription","affiliateUrl","destinationUrl"].forEach(id => $(id).value = "");
+  $("imageFile").value = "";
+  $("formTitle").textContent = "Thêm ảnh mới";
+  $("saveItem").textContent = "＋ Thêm vào trang";
+  $("cancelEdit").style.display = "none";
+  setPreviewUpload("");
+}
+function editItem(id) {
+  const item = items.find(x => x.id === id);
+  if (!item) return;
+  editingId = id; chosenImageData = item.imageData || "";
+  $("imageUrl").value = item.imageUrl || "";
+  $("itemTitle").value = item.title || "";
+  $("itemDescription").value = item.description || "";
+  $("affiliateUrl").value = item.affiliateUrl || "";
+  $("destinationUrl").value = item.destinationUrl || "";
+  $("formTitle").textContent = "Chỉnh sửa ảnh";
+  $("saveItem").textContent = "Lưu thay đổi";
+  $("cancelEdit").style.display = "inline-block";
+  setPreviewUpload(getImage(item));
+  switchTab("editor");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+function switchTab(tab) {
+  document.querySelectorAll(".tab").forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  $("editorView").style.display = tab === "editor" ? "" : "none";
+  $("itemsView").style.display = tab === "items" ? "" : "none";
+}
+document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => switchTab(b.dataset.tab)));
+$("pageTitle").addEventListener("input", renderPreview);
+$("pageDescription").addEventListener("input", renderPreview);
+$("imageUrl").addEventListener("input", () => {
+  const url = safeUrl($("imageUrl").value.trim());
+  if (url) { chosenImageData = ""; setPreviewUpload(url); }
+});
+$("imageFile").addEventListener("change", () => {
+  const file = $("imageFile").files && $("imageFile").files[0];
+  if (!file) return;
+  if (!file.type.startsWith("image/")) { showToast("Vui lòng chọn file ảnh."); return; }
+  if (file.size > 2.5 * 1024 * 1024) {
+    showToast("Ảnh quá lớn. Hãy chọn ảnh dưới 2,5 MB để lưu dễ hơn.");
+    $("imageFile").value = ""; return;
+  }
+  const reader = new FileReader();
+  reader.onload = () => { chosenImageData = String(reader.result || ""); $("imageUrl").value = ""; setPreviewUpload(chosenImageData); };
+  reader.readAsDataURL(file);
+});
+$("saveItem").addEventListener("click", () => {
+  const title = $("itemTitle").value.trim();
+  const affiliateUrl = safeUrl($("affiliateUrl").value.trim());
+  const destinationUrl = safeUrl($("destinationUrl").value.trim());
+  const imageUrl = safeUrl($("imageUrl").value.trim());
+  if (!title) { showToast("Hãy nhập tên ảnh hoặc sản phẩm."); $("itemTitle").focus(); return; }
+  if (!affiliateUrl) { showToast("Hãy nhập link Affiliate Shopee hợp lệ."); $("affiliateUrl").focus(); return; }
+  if (!destinationUrl) { showToast("Hãy nhập link đích hợp lệ."); $("destinationUrl").focus(); return; }
+  const record = {
+    id: editingId || (Date.now().toString(36) + Math.random().toString(36).slice(2,7)),
+    title,
+    description: $("itemDescription").value.trim(),
+    imageUrl: chosenImageData ? "" : imageUrl,
+    imageData: chosenImageData,
+    affiliateUrl, destinationUrl
+  };
+  if (editingId) items = items.map(x => x.id === editingId ? record : x);
+  else items.push(record);
+  persist(); renderAll(); clearForm(); showToast(editingId ? "Đã lưu thay đổi." : "Đã thêm ảnh vào trang.");
+});
+$("cancelEdit").addEventListener("click", clearForm);
+$("clearForm").addEventListener("click", clearForm);
+$("previewBtn").addEventListener("click", () => {
+  document.querySelector(".preview-wrap").scrollIntoView({behavior:"smooth",block:"start"});
+});
+$("exportBtn").addEventListener("click", () => {
+  const data = {
+    pageTitle: $("pageTitle").value,
+    pageDescription: $("pageDescription").value,
+    items
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:"application/json"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = "creator-hub-data.json"; a.click();
+  URL.revokeObjectURL(url);
+  showToast("Đã xuất dữ liệu dự phòng.");
+});
+function revealDestinationForReturnedItem() {
+  let returnId = "";
+  try { returnId = sessionStorage.getItem("creatorHubReturnItem") || ""; } catch {}
+  if (!returnId) return;
+  const idx = items.findIndex(x => String(x.id) === returnId);
+  if (idx < 0 || !safeUrl(items[idx].destinationUrl)) return;
+  const links = document.querySelectorAll(".preview-dest");
+  if (links[idx]) links[idx].classList.add("show");
+}
+window.addEventListener("pageshow", revealDestinationForReturnedItem);
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") revealDestinationForReturnedItem();
+});
+window.addEventListener("focus", revealDestinationForReturnedItem);
+loadItems();
+renderAll();
+</script>
+</body>
+</html>
